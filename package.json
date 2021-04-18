@@ -1,0 +1,30 @@
+{
+  "name": "repti",
+  "version": "0.1.0",
+  "description": "web app to keep track of things to do regularly",
+  "private": true,
+  "main": "app.js",
+  "scripts": {
+    "test": "jasmine"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/talflon/repti.git"
+  },
+  "author": "Daniel Getz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/talflon/repti/issues"
+  },
+  "homepage": "https://github.com/talflon/repti#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "hbs": "^4.1.2"
+  },
+  "devDependencies": {
+    "chromedriver": "^88.0.0",
+    "got": "^11.8.2",
+    "jasmine": "^3.7.0",
+    "selenium-webdriver": "^4.0.0-beta.3"
+  }
+}
