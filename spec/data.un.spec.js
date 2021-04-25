@@ -1,5 +1,11 @@
 'use strict';
 
+const fs = require('fs')
+const path = require('path')
+
+const tmp = require('tmp')
+tmp.setGracefulCleanup()
+
 const data = require('../data.js')
 
 describe("Test task id generation", () => {
@@ -44,3 +50,35 @@ describe("Test task id generation", () => {
     });
   });
 });
+
+describe("task id storage", () => {
+  beforeEach(() => {
+    this.storageDir = tmp.dirSync().name
+    this.storage = new data.DataStorage(this.storageDir)
+    this.userCode = 'so-secret'
+    this.storageFile = path.join(this.storageDir, this.userCode + '.json')
+    fs.writeFileSync(this.storageFile, '')
+  })
+
+  it("returns undefined if no file", () => {
+    expect(this.storage.get('not-' + this.userCode)).toBeUndefined()
+  })
+
+  it("creates new schema if empty file", () => {
+    let userData = this.storage.get(this.userCode)
+    expect(userData.tasks).toEqual({})
+    expect(userData.order).toEqual([])
+  })
+
+  it("returns schema saved in file", () => {
+    let userData = {
+      order: ['one', 'two'],
+      tasks: {
+        one: { name: 'um' },
+        two: { name: 'dois' }
+      }
+    }
+    fs.writeFileSync(this.storageFile, JSON.stringify(userData))
+    expect(this.storage.get(this.userCode)).toEqual(userData)
+  })
+})

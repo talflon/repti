@@ -9,7 +9,7 @@
       {{#each tasks}}
         <li>{{ this.name }}</li>
       {{/each}}
-      <li><form action="/tasks" method="post"><input id="new_task_entry" name="task_name" /></form></li>
+      <li><form action="/{{ this.userCode }}/tasks" method="post"><input id="new_task_entry" name="task_name" /></form></li>
     </ul>
   </body>
 </html>

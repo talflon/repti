@@ -1,48 +1,56 @@
 'use strict';
 
+const fs = require('fs')
+const path = require('path')
+const tmp = require('tmp')
+tmp.setGracefulCleanup()
+
 const {By, Key, until} = require('selenium-webdriver');
 
-const {createBrowser} = require('./defaults.js');
+const {createServer} = require('../server.js');
+const {createBrowser} = require('./lib/browser.js');
 
-var setupServer;
-if (process.env.REPTI_URL) {
-  const ROOT_URL = process.env.REPTI_URL;
+const PORT = 8765;
 
-  console.log(`Testing on ${ROOT_URL}`)
-
-  setupServer = async () => {
-    return {
-      url: ROOT_URL,
-      close: async () => { }
-    }
-  }
-} else {
-  const {createServer} = require('../server.js');
-  const PORT = 8765;
-
-  console.log('Testing internally')
-
-  setupServer = async () => createServer('localhost', PORT)
-}
+//setupServer = async () => createServer('localhost', PORT, tmp.dirSync().name)
 
 function sleep(ms) {
   return new Promise(r => setTimeout(r, ms));
 }
 
 describe("Test our homepage", () => {
+  const startServer = async () => {
+    this.server = await createServer('localhost', PORT, this.storageDir)
+  }
+
+  const stopServer = async () => {
+    if (this.server) {
+      await this.server.close()
+      delete this.server
+    }
+  }
+
+  const startBrowser = async () => {
+    this.browser = await createBrowser()
+  }
+
+  const stopBrowser = async () => {
+    if (this.browser) {
+      await this.browser.quit()
+      delete this.browser
+    }
+  }
+
   beforeEach(async () => {
-    [this.server, this.browser] = await Promise.all([
-      setupServer(),
-      createBrowser(),
-    ]);
-    this.ROOT_URL = this.server.url;
+    this.storageDir = tmp.dirSync().name
+    this.userCode = 'a-secret'
+    fs.writeFileSync(path.join(this.storageDir, this.userCode + '.json'), '')
+    await Promise.all([startServer(), startBrowser()]);
+    this.ROOT_URL = this.server.url + '/' + this.userCode
   });
 
   afterEach(async () => {
-    await Promise.all([
-      this.browser.quit(),
-      this.server.close(),
-    ]);
+    await Promise.all([stopBrowser(), stopServer()])
   });
 
   const getNewTaskEntry = () => {

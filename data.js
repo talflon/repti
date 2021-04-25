@@ -1,5 +1,8 @@
 'use strict'
 
+const fs = require('fs')
+const path = require('path')
+
 const BASE64_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'
 
 function randomTaskId() {
@@ -19,7 +22,40 @@ function newTaskId(oldTaskIds) {
   return task_id
 }
 
+function DataStorage(dir) {
+  this.dir = dir
+}
+
+DataStorage.prototype = {
+  getFilePath: function (userCode) {
+    return path.join(this.dir, userCode + '.json')
+  },
+  get: function (userCode) {
+    try {
+      let fileContents = fs.readFileSync(this.getFilePath(userCode))
+      if (fileContents.length === 0) {
+        return {
+          order: [],
+          tasks: {},
+        }
+      } else {
+        return JSON.parse(fileContents)
+      }
+    } catch (err) {
+      if (err.code === 'ENOENT') {
+        return
+      } else {
+        throw err
+      }
+    }
+  },
+  put: function (userCode, userData) {
+    fs.writeFileSync(this.getFilePath(userCode), JSON.stringify(userData))
+  }
+}
+
 module.exports = {
   randomTaskId,
-  newTaskId
+  newTaskId,
+  DataStorage
 }

@@ -1,6 +1,6 @@
 'use strict';
 
-const {createBrowser} = require('./defaults.js');
+const {createBrowser} = require('./lib/browser.js');
 
 describe("Test that we can test", () => {
   it("can test things", () => {
