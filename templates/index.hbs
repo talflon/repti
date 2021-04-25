@@ -5,6 +5,11 @@
   </head>
   <body>
     <h1>Repti!</h1>
-    <p>Oi mund</p>
+    <ul id="task_list">
+      {{#each tasks}}
+        <li>{{ this.name }}</li>
+      {{/each}}
+      <li><form action="/tasks" method="post"><input id="new_task_entry" name="task_name" /></form></li>
+    </ul>
   </body>
 </html>
