@@ -6,7 +6,7 @@ const fs = require('fs')
 const express = require('express')
 const stoppable = require('stoppable')
 
-const {newTaskId, DataStorage} = require('./data.js')
+const {newTaskId, DataStorage, daynum} = require('./data.js')
 
 async function createServer(hostname, port, storageDir) {
   const server = {}
@@ -21,16 +21,31 @@ async function createServer(hostname, port, storageDir) {
   server.storageDir = storageDir
   server.storage = new DataStorage(storageDir)
 
-  server.app.get('/:userCode', (req, res) => {
+  function task_for_template(id, task) {
+    task = Object.assign({}, task)
+    task.id = id
+    if (task.done == null) {
+      task.daysAgo = '—'
+    } else {
+      task.daysAgo = daynum() - task.done
+    }
+    return task
+  }
+
+  server.app.get('/:userCode/', (req, res) => {
     let data = server.storage.get(req.params.userCode)
     if (!data) {
       return res.sendStatus(404)
     }
-    res.render('index', {
-      data,
-      userCode: req.params.userCode,
-      tasks: data.order.map(task_id => data.tasks[task_id])
-    })
+    if (!req.url.endsWith('/')) {
+      res.redirect(301, req.url + '/')
+    } else {
+      res.render('index', {
+        data,
+        userCode: req.params.userCode,
+        tasks: data.order.map(task_id => task_for_template(task_id, data.tasks[task_id]))
+      })
+    }
   });
 
   server.app.post('/:userCode/tasks', (req, res) => {
@@ -41,6 +56,29 @@ async function createServer(hostname, port, storageDir) {
     let task_id = newTaskId(data.order)
     data.tasks[task_id] = {name: req.body.task_name};
     data.order.push(task_id)
+    server.storage.put(req.params.userCode, data)
+    res.redirect(303, '/' + req.params.userCode + '/')
+  });
+
+  function parseDay(dayStr) {
+    if (dayStr === 'today') {
+      return daynum()
+    } else {
+      return parseInt(dayStr)
+    }
+  }
+
+  server.app.post('/:userCode/tasks/:taskId', (req, res) => {
+    let data = server.storage.get(req.params.userCode)
+    let task = data.tasks[req.params.taskId]
+    if (!task) {
+      return res.sendStatus(404)
+    }
+
+    let day = parseDay(req.body.task_date)
+    if (!isNaN(day)) {
+      task.done = day
+    }
     server.storage.put(req.params.userCode, data)
     res.redirect(303, '/' + req.params.userCode + '/')
   });

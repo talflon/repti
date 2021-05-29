@@ -12,10 +12,6 @@ const {DataStorage} = require('../data.js');
 
 const PORT = 9598;
 
-function sleep(ms) {
-  return new Promise(r => setTimeout(r, ms));
-}
-
 describe("Test the server", () => {
   beforeEach(async () => {
     this.storageDir = tmp.dirSync().name

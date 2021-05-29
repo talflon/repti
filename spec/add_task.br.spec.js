@@ -9,14 +9,11 @@ const {By, Key, until} = require('selenium-webdriver');
 
 const {createServer} = require('../server.js');
 const {createBrowser} = require('./lib/browser.js');
+const {sleep} = require('./lib/util.js')
 
 const PORT = 8765;
 
-//setupServer = async () => createServer('localhost', PORT, tmp.dirSync().name)
-
-function sleep(ms) {
-  return new Promise(r => setTimeout(r, ms));
-}
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000
 
 describe("Test our homepage", () => {
   const startServer = async () => {
@@ -66,12 +63,6 @@ describe("Test our homepage", () => {
 
   const getList = () => {
     return this.browser.wait(until.elementLocated(By.id('task_list')));
-  }
-
-  const getListTexts = async () => {
-    let list_table = await getListTable();
-    let rows = await list_table.findElements(By.tagName('tr'));
-    return await Promise.all(rows.map(row => row.getText()));
   }
 
   it("has our title", async () => {

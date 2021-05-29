@@ -7,9 +7,15 @@
     <h1>Repti!</h1>
     <ul id="task_list">
       {{#each tasks}}
-        <li>{{ this.name }}</li>
+        <li id="task-{{ this.id }}">
+          <form method="POST" action="tasks/{{ this.id }}">
+            {{ this.name }}: {{ this.daysAgo }}
+            <input type="hidden" name="task_date" value="today" />
+            <input type="submit" value="✓" />
+          </form>
+        </li>
       {{/each}}
-      <li><form action="/{{ this.userCode }}/tasks" method="post"><input id="new_task_entry" name="task_name" /></form></li>
+      <li><form action="tasks" method="post"><input id="new_task_entry" name="task_name" /></form></li>
     </ul>
   </body>
 </html>

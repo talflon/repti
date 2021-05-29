@@ -3,6 +3,8 @@
 const fs = require('fs')
 const path = require('path')
 
+const dayjs = require('dayjs')
+
 const BASE64_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'
 
 function randomTaskId() {
@@ -54,8 +56,15 @@ DataStorage.prototype = {
   }
 }
 
+const DAYNUM_EPOCH = dayjs('2021-01-01')
+
+function daynum(d) {
+  return -DAYNUM_EPOCH.diff(d, 'day')
+}
+
 module.exports = {
   randomTaskId,
   newTaskId,
-  DataStorage
+  DataStorage,
+  daynum
 }

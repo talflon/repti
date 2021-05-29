@@ -5,6 +5,8 @@ const path = require('path')
 
 const tmp = require('tmp')
 tmp.setGracefulCleanup()
+const dayjs = require('dayjs')
+const mockdate = require('mockdate')
 
 const data = require('../data.js')
 
@@ -80,5 +82,26 @@ describe("task id storage", () => {
     }
     fs.writeFileSync(this.storageFile, JSON.stringify(userData))
     expect(this.storage.get(this.userCode)).toEqual(userData)
+  })
+})
+
+describe("date handling: ", () => {
+  describe("daynum", () => {
+    afterEach(() => mockdate.reset())
+
+    it("gives same number for same day", () => {
+      expect(data.daynum(dayjs('2021-05-22 10:34')) - data.daynum(dayjs('2021-05-22 8:12'))).toBe(0)
+    })
+    it("counts days between", () => {
+      expect(data.daynum(dayjs('2021-08-04 03:22')) - data.daynum(dayjs('2021-07-30 12:50'))).toBe(5)
+    })
+    it("gives today's number with no argument", () => {
+      expect(data.daynum()).toBe(data.daynum(new Date()))
+
+      const d = dayjs('2021-03-15 18:18')
+      mockdate.set(d)
+      expect(data.daynum(dayjs())).toBe(data.daynum(d))
+      expect(data.daynum()).toBe(data.daynum(d))
+    })
   })
 })

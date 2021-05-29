@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/talflon/repti#readme",
   "dependencies": {
+    "dayjs": "^1.10.4",
     "express": "^4.17.1",
     "hbs": "^4.1.2",
     "stoppable": "^1.1.0"
@@ -25,6 +26,8 @@
   "devDependencies": {
     "got": "^11.8.2",
     "jasmine": "^3.7.0",
+    "jasmine-spec-reporter": "^7.0.0",
+    "mockdate": "^3.0.5",
     "selenium-webdriver": "^4.0.0-beta.3",
     "tmp": "^0.2.1"
   }
