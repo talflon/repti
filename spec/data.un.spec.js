@@ -33,6 +33,20 @@ describe("Test task id generation", () => {
       }
     });
 
+    it("creates a key that's a good URL component", () => {
+      for (let t = 0; t < 1000; t++) {
+        let task_id = data.randomTaskId()
+        expect(encodeURIComponent(task_id)).toBe(task_id)
+      }
+    });
+
+    it("creates a lowercase key", () => {
+      for (let t = 0; t < 1000; t++) {
+        let task_id = data.randomTaskId()
+        expect(task_id).toBe(task_id.toLowerCase())
+      }
+    });
+
     it("creates different keys", () => {
       for (let t = 0; t < 10; t++) {
         let task_ids = []

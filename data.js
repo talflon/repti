@@ -5,12 +5,12 @@ const path = require('path')
 
 const dayjs = require('dayjs')
 
-const BASE64_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'
+const TASKID_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789'
 
 function randomTaskId() {
   let task_id = ''
-  for (let i = 0; i < 6; i++) {
-    task_id += BASE64_CHARS[Math.floor(Math.random() * 64)]
+  for (let i = 0; i < 7; i++) {
+    task_id += TASKID_CHARS[Math.floor(Math.random() * TASKID_CHARS.length)]
   }
   return task_id
 }
