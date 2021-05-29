@@ -2,6 +2,7 @@
 
 const {once} = require('events')
 const fs = require('fs')
+const path = require('path')
 
 const express = require('express')
 const stoppable = require('stoppable')
@@ -31,6 +32,8 @@ async function createServer(hostname, port, storageDir) {
     }
     return task
   }
+
+  server.app.use('/', express.static(path.join(__dirname, 'static')))
 
   server.app.get('/:userCode/', (req, res) => {
     let data = server.storage.get(req.params.userCode)
