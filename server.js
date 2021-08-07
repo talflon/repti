@@ -35,7 +35,7 @@ async function createServer(hostname, port, storageDir) {
 
   server.app.use('/', express.static(path.join(__dirname, 'static')))
 
-  server.app.get('/:userCode/', (req, res) => {
+  server.app.get('/d/:userCode/', (req, res) => {
     let data = server.storage.get(req.params.userCode)
     if (!data) {
       return res.sendStatus(404)
@@ -51,7 +51,7 @@ async function createServer(hostname, port, storageDir) {
     }
   });
 
-  server.app.post('/:userCode/tasks', (req, res) => {
+  server.app.post('/d/:userCode/tasks', (req, res) => {
     let data = server.storage.get(req.params.userCode)
     if (!data) {
       return res.sendStatus(404)
@@ -60,7 +60,7 @@ async function createServer(hostname, port, storageDir) {
     data.tasks[task_id] = {name: req.body.task_name};
     data.order.push(task_id)
     server.storage.put(req.params.userCode, data)
-    res.redirect(303, '/' + req.params.userCode + '/')
+    res.redirect(303, '/d/' + req.params.userCode + '/')
   });
 
   function parseDay(dayStr) {
@@ -71,7 +71,7 @@ async function createServer(hostname, port, storageDir) {
     }
   }
 
-  server.app.post('/:userCode/tasks/:taskId', (req, res) => {
+  server.app.post('/d/:userCode/tasks/:taskId', (req, res) => {
     let data = server.storage.get(req.params.userCode)
     let task = data.tasks[req.params.taskId]
     if (!task) {
@@ -83,7 +83,7 @@ async function createServer(hostname, port, storageDir) {
       task.done = day
     }
     server.storage.put(req.params.userCode, data)
-    res.redirect(303, '/' + req.params.userCode + '/')
+    res.redirect(303, '/d/' + req.params.userCode + '/')
   });
 
   let listener = server.app.listen(port, hostname);

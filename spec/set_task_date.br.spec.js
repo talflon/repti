@@ -46,7 +46,7 @@ describe("Homepage", () => {
     this.userCode = 'some-secret'
     fs.writeFileSync(path.join(this.storageDir, this.userCode + '.json'), '')
     await Promise.all([startServer(), startBrowser()]);
-    this.ROOT_URL = this.server.url + '/' + this.userCode
+    this.ROOT_URL = this.server.url + '/d/' + this.userCode
     this.storage = new DataStorage(this.storageDir)
   });
 

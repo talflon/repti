@@ -43,7 +43,7 @@ describe("Test our homepage", () => {
     this.userCode = 'a-secret'
     fs.writeFileSync(path.join(this.storageDir, this.userCode + '.json'), '')
     await Promise.all([startServer(), startBrowser()]);
-    this.ROOT_URL = this.server.url + '/' + this.userCode
+    this.ROOT_URL = this.server.url + '/d/' + this.userCode
   });
 
   afterEach(async () => {

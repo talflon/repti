@@ -20,7 +20,7 @@ describe("the HTTP server", () => {
     this.userCode = 'the-secret'
     this.server = await createServer('localhost', PORT, this.storageDir)
     fs.writeFileSync(path.join(this.storageDir, this.userCode + '.json'), '')
-    this.ROOT_URL = this.server.url + '/' + this.userCode
+    this.ROOT_URL = this.server.url + '/d/' + this.userCode
     this.storage = new DataStorage(this.storageDir)
   });
 
