@@ -7,7 +7,7 @@ const path = require('path')
 const express = require('express')
 const stoppable = require('stoppable')
 
-const {newTaskId, DataStorage, daynum} = require('./data.js')
+const {newTaskId, DataStorage, daynum, daynumday} = require('./data.js')
 
 async function createServer(hostname, port, storageDir) {
   const server = {}
@@ -29,6 +29,7 @@ async function createServer(hostname, port, storageDir) {
       task.daysAgo = '—'
     } else {
       task.daysAgo = daynum() - task.done
+      task.doneDay = daynumday(task.done).format('YYYY-MM-DD')
     }
     return task
   }

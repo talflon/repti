@@ -9,9 +9,18 @@
       {{#each tasks}}
         <li id="task-{{ this.id }}">
           <form method="POST" action="tasks/{{ this.id }}">
-            {{ this.name }}: {{ this.daysAgo }}
-            <input type="hidden" name="task_date" value="today" />
-            <input type="submit" value="✓" />
+            <details>
+              <summary>
+                {{ this.name }}: {{ this.daysAgo }}
+                <input type="hidden" name="task_date" value="today" />
+                <input type="submit" value="✓" />
+              </summary>
+              {{#if this.doneDay}}
+                last done on {{ this.doneDay }}
+              {{else}}
+                not done yet
+              {{/if}}
+            </details>
           </form>
         </li>
       {{/each}}
