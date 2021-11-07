@@ -76,6 +76,16 @@ describe("Test our homepage", () => {
     expect((await getList().getText())).toContain('exercise');
   });
 
+  it("lets you add a task with a button", async () => {
+    await this.browser.get(this.ROOT_URL);
+    let entry = await getNewTaskEntry();
+    await entry.sendKeys('coisa');
+    let button = await this.browser.wait(until.elementLocated(By.xpath("//*[@id='new_task']//button[@type='submit']")))
+    await button.click()
+    await sleep(1000);
+    expect((await getList().getText())).toContain('coisa');
+  });
+
   it("lets you add two tasks", async () => {
     await this.browser.get(this.ROOT_URL);
     await addTask('read');

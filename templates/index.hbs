@@ -24,7 +24,11 @@
           </form>
         </li>
       {{/each}}
-      <li><form action="tasks" method="post"><input id="new_task_entry" name="task_name" /></form></li>
+      <li id="new_task">
+        <form action="tasks" method="post">
+          Add new task: <input id="new_task_entry" name="task_name" /> <button type="submit">ADD</button>
+        </form>
+      </li>
     </ul>
   </body>
 </html>
