@@ -118,4 +118,13 @@ describe("date handling: ", () => {
       expect(data.daynum()).toBe(data.daynum(d))
     })
   })
+
+  describe("daynumday", () => {
+    it("gives the day for a day number", () => {
+      expect(data.daynumday(data.daynum(dayjs('2021-11-02 05:23'))).format('YYYY-MM-DD')).toBe('2021-11-02')
+    })
+    it("round trips through daynum", () => {
+      expect(data.daynum(data.daynumday(13))).toBe(13)
+    })
+  })
 })

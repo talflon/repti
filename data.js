@@ -62,9 +62,14 @@ function daynum(d) {
   return -DAYNUM_EPOCH.diff(d, 'day')
 }
 
+function daynumday(n) {
+  return DAYNUM_EPOCH.add(n, 'day')
+}
+
 module.exports = {
   randomTaskId,
   newTaskId,
   DataStorage,
-  daynum
+  daynum,
+  daynumday
 }
