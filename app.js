@@ -1,12 +1,9 @@
 'use strict';
 
-const {createServer} = require('./server.js')
-
-const hostname = '127.0.0.1';
-const port = 8000;
+const config = require('config');
+const {createServer} = require('./server.js');
 
 (async () => {
-  let server = await createServer(hostname, port, './');
+  let server = await createServer(config.get('server.hostname'), config.get('server.port'), config.get('server.storageDir'));
   console.log(`Repti server running at ${server.url} with storage in ${server.storageDir}`);
 })();
-

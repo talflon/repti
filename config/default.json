@@ -1,0 +1,7 @@
+{
+  "server": {
+    "hostname": "localhost",
+    "port": 8000,
+    "storageDir": "userdata"
+  }
+}
