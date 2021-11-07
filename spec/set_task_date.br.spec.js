@@ -92,15 +92,40 @@ describe("Homepage", () => {
     expect(list_text).not.toContain('-16');
   });
 
-  it("sets the task date to today when button clicked", async () => {
+  it("sets the task date to today when done button clicked", async () => {
     const id = 'asdf'
     add_task(id, { name: 'N' })
     await this.browser.get(this.ROOT_URL);
     let row = await this.browser.wait(until.elementLocated(By.id('task-' + id)))
-    let button = await row.findElement(By.xpath(".//input[@type='submit']"))
+    let button = await row.findElement(By.xpath(".//button[@type='submit'][@name='task_date'][@value='today']"))
     await button.click()
     await sleep(500)
     await getList()
     expect(get_task(id).done).toBe(daynum())
+  });
+
+  it("hides the reset button behind accordion", async () => {
+    const id = 'g'
+    add_task(id, { name: 'z', done: 94 })
+    await this.browser.get(this.ROOT_URL);
+    let row = await this.browser.wait(until.elementLocated(By.id('task-' + id)))
+    let button = await row.findElement(By.xpath(".//button[@type='submit'][@name='task_date'][@value='reset']"))
+    expect(await button.isDisplayed()).toBeFalsy()
+    await row.click()  // open accordion
+    expect(await button.isDisplayed()).toBeTruthy()
+  });
+
+  it("resets the task date when reset button clicked", async () => {
+    const id = 'k'
+    add_task(id, { name: 'n', done: 54321 })
+    await this.browser.get(this.ROOT_URL);
+    let row = await this.browser.wait(until.elementLocated(By.id('task-' + id)))
+    await row.click()  // open accordion
+    let button = await row.findElement(By.xpath(".//button[@type='submit'][@name='task_date'][@value='reset']"))
+    await button.click()
+    await sleep(500)
+    await getList()
+    expect(get_task(id).done).toBeFalsy()
+    expect(get_task(id).done).not.toBe(0)
   });
 });

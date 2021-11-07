@@ -67,6 +67,8 @@ async function createServer(hostname, port, storageDir) {
   function parseDay(dayStr) {
     if (dayStr === 'today') {
       return daynum()
+    } else if (dayStr === 'reset') {
+      return null
     } else {
       return parseInt(dayStr)
     }
@@ -80,9 +82,10 @@ async function createServer(hostname, port, storageDir) {
     }
 
     let day = parseDay(req.body.task_date)
-    if (!isNaN(day)) {
-      task.done = day
+    if (isNaN(day)) {
+      throw new Error('Invalid day')
     }
+    task.done = day
     server.storage.put(req.params.userCode, data)
     res.redirect(303, '/d/' + req.params.userCode + '/')
   });

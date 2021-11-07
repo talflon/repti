@@ -40,7 +40,11 @@ describe("the HTTP server", () => {
 
   it("reloads after a POST to /tasks/id", async () => {
     add_task('blah', { name: 'meh' })
-    const response = await got.post(this.ROOT_URL + '/tasks/blah')
+    const response = await got.post(this.ROOT_URL + '/tasks/blah', {
+      form: {
+        task_date: 7
+      }
+    })
     expect(response.url).toBe(this.ROOT_URL + '/');
   });
 
@@ -87,5 +91,18 @@ describe("the HTTP server", () => {
       }
     })
     expect(get_task(id).done).toBe(daynum(fake_day))
+   })
+
+   it("clears date on POST to /tasks/id with task_date: 'reset'", async () => {
+    const id = 'xyz', fake_day = dayjs('2021-03-04 1:12');
+    add_task(id, { name: 'r' })
+    mockdate.set(fake_day)
+    await got.post(this.ROOT_URL + '/tasks/' + id, {
+      form: {
+        task_date: 'reset'
+      }
+    })
+    expect(get_task(id).done).toBeFalsy()
+    expect(get_task(id).done).not.toBe(0)
    })
 });

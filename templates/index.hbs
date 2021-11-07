@@ -12,11 +12,11 @@
             <details>
               <summary>
                 {{ this.name }}: {{ this.daysAgo }}
-                <input type="hidden" name="task_date" value="today" />
-                <input type="submit" value="✓" />
+                <button type="submit" name="task_date" value="today">✓</button>
               </summary>
               {{#if this.doneDay}}
                 last done on {{ this.doneDay }}
+                <button type="submit" name="task_date" value="reset">×</button>
               {{else}}
                 not done yet
               {{/if}}
